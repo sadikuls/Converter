@@ -28,28 +28,17 @@ class CurrencyRepoImpl @Inject constructor(
     private val mTag = "CurrencyRepoImpl"
 
 
-    override suspend fun getCurrencies(latest: Boolean): Flow<Resource<List<Currency>>> {
-        if (getCurrenciesFromLocal().size == 0) {
-            Log.w("CurrencyRepo", "Returning data from remote")
-            return safeApiCall {
-                apiService.getData()
-            }.transform {
-                if (it is Resource.Success) {
-                    val data = it.data.rates.map {
-                        Currency(it.key, it.value)
-                    }
-                    insertCurrencies(data)
-                    //if (getCount() == 0) initializeBalance(data)
-                    emit(Resource.Success(getCurrenciesFromLocal()))
-                } else emit(it as Resource<List<Currency>>)
-            }
-        } else {
-            Log.w("CurrencyRepo", "Returning data from local")
-            return flow {
-                emit(Resource.Success(getCurrenciesFromLocal()))
-            }
+    override suspend fun getCurrencies(latest: Boolean): Flow<Resource<List<Currency>>> =
+        safeApiCall {
+            apiService.getData()
+        }.transform {
+            if (it is Resource.Success) {
+                val data = it.data.rates.map {
+                    Currency(it.key, it.value)
+                }
+                emit(Resource.Success(data))
+            } else emit(it as Resource<List<Currency>>)
         }
-    }
 
     override suspend fun getCurrenciesFromLocal(): List<Currency> {
         return appDatabase.currencyDao().getAllCurrency().map { it.toCurrency() }
