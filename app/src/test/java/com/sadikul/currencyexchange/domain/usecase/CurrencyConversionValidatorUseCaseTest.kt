@@ -5,14 +5,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.sadikul.currencyexchange.core.utils.CURENCIES_FOR_DEFAULT_DATA
 import com.sadikul.currencyexchange.core.utils.INITIAL_BALANCE
 import com.sadikul.currencyexchange.core.utils.Resource
-import com.sadikul.currencyexchange.data.remote.dto.Currency
 import com.sadikul.currencyexchange.data.repository.FakeBalanceCalculatorRepoImpl
 import com.sadikul.currencyexchange.data.repository.FakeCurrencyRepoImpl
-import com.sadikul.currencyexchange.domain.repository.BalanceCalculatorRepo
-import com.sadikul.currencyexchange.presentation.currencyconversion.ConversionModel
-import com.sadikul.currencyexchange.presentation.currencyconversion.ValidatorState
+import com.sadikul.currencyexchange.domain.model.ConversionModel
+import com.sadikul.currencyexchange.presentation.currencyconversion.states.ValidatorState
 import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*

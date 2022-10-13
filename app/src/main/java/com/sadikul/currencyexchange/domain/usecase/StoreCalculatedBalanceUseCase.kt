@@ -1,7 +1,7 @@
 package com.sadikul.currencyexchange.domain.usecase
 import com.sadikul.currencyexchange.domain.model.CurrencyBalanceModel
 import com.sadikul.currencyexchange.domain.repository.BalanceCalculatorRepo
-import com.sadikul.currencyexchange.presentation.currencyconversion.ConversionModel
+import com.sadikul.currencyexchange.domain.model.ConversionModel
 import javax.inject.Inject
 
 class StoreCalculatedBalanceUseCase @Inject constructor(private val repo: BalanceCalculatorRepo)

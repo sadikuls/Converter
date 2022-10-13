@@ -1,4 +1,4 @@
-package com.sadikul.currencyexchange.presentation.currencyconversion
+package com.sadikul.currencyexchange.domain.model
 
 data class ConversionModel(
     val fromCurrency:String,

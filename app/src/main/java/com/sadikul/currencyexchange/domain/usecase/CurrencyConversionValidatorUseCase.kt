@@ -1,8 +1,8 @@
 package com.sadikul.currencyexchange.domain.usecase
 import com.sadikul.currencyexchange.core.utils.stringValueUptoTwoDecimalPlace
 import com.sadikul.currencyexchange.domain.repository.BalanceCalculatorRepo
-import com.sadikul.currencyexchange.presentation.currencyconversion.ConversionModel
-import com.sadikul.currencyexchange.presentation.currencyconversion.ValidatorState
+import com.sadikul.currencyexchange.domain.model.ConversionModel
+import com.sadikul.currencyexchange.presentation.currencyconversion.states.ValidatorState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

@@ -2,12 +2,9 @@ package com.sadikul.currencyexchange.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.google.common.truth.Truth
 import com.sadikul.currencyexchange.core.utils.Resource
-import com.sadikul.currencyexchange.data.remote.dto.Currency
-import com.sadikul.currencyexchange.data.repository.FakeBalanceCalculatorRepoImpl
 import com.sadikul.currencyexchange.data.repository.FakeCurrencyRepoImpl
-import com.sadikul.currencyexchange.presentation.currencyconversion.ConversionModel
+import com.sadikul.currencyexchange.domain.model.ConversionModel
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking

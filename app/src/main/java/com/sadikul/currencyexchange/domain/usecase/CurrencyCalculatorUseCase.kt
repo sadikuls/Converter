@@ -1,8 +1,7 @@
 package com.sadikul.currencyexchange.domain.usecase
 import com.sadikul.currencyexchange.core.utils.Resource
-import com.sadikul.currencyexchange.domain.repository.BalanceCalculatorRepo
 import com.sadikul.currencyexchange.domain.repository.CurrencyconversionRepo
-import com.sadikul.currencyexchange.presentation.currencyconversion.ConversionModel
+import com.sadikul.currencyexchange.domain.model.ConversionModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
