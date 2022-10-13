@@ -2,13 +2,13 @@ package com.sadikul.currencyexchange.presentation.currencyconversion
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sadikul.currencyexchange.core.utils.COMMISSION_RATE
+import com.sadikul.currencyexchange.core.utils.MAX_FREE_CONVERSION
+import com.sadikul.currencyexchange.core.utils.MAX_FREE_CONVERSION_AMOUNT
 import com.sadikul.currencyexchange.core.utils.Resource
 import com.sadikul.currencyexchange.data.remote.dto.Currency
 import com.sadikul.currencyexchange.domain.model.ConversionModel
 import com.sadikul.currencyexchange.domain.usecase.*
-import com.sadikul.currencyexchange.domain.usecase.CommissionFeeCalculatorUseCase.Companion.COMMISSION_RATE
-import com.sadikul.currencyexchange.domain.usecase.CommissionFeeCalculatorUseCase.Companion.MAX_FREE_CONVERSION
-import com.sadikul.currencyexchange.domain.usecase.CommissionFeeCalculatorUseCase.Companion.MAX_FREE_CONVERSION_AMOUNT
 import com.sadikul.currencyexchange.presentation.currencyconversion.states.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -76,7 +76,7 @@ class CurrencyconversionViewmodel @Inject constructor(
     }
 
     private fun getCurrencies() = viewModelScope.launch(Dispatchers.IO) {
-            currenciesUseCase(forceToGetRemoteData = true).onEach {
+            currenciesUseCase().onEach {
                 when (it) {
                     is Resource.Loading -> {
                         _state.value = CurrencyListState(isLoading = true)

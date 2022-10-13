@@ -4,11 +4,7 @@ import com.sadikul.currencyexchange.domain.repository.BalanceCalculatorRepo
 import javax.inject.Inject
 
 class CommissionFeeCalculatorUseCase @Inject constructor(private val repo: BalanceCalculatorRepo) {
-    companion object{
-        const val COMMISSION_RATE = 0.7
-        const val MAX_FREE_CONVERSION_AMOUNT = 200.0
-        const val MAX_FREE_CONVERSION = 5
-    }
+
     operator suspend fun invoke(
         amount: Double,
         currencyName: String,

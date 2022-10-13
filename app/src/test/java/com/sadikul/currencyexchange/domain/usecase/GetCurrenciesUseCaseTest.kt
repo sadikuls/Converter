@@ -31,7 +31,7 @@ class GetCurrenciesTest {
     }
     @Test
     fun checkUseCaseProvidingDataproperly() = runBlocking {
-        useCase(forceToGetRemoteData = true).collect(object : FlowCollector<Resource<List<Currency>>> {
+        useCase().collect(object : FlowCollector<Resource<List<Currency>>> {
             override suspend fun emit(value: Resource<List<Currency>>) {
                 assertThat((value as Resource.Success).data.isNotEmpty()).isTrue()
                 value.data.let {

@@ -18,3 +18,8 @@ const val ENDPOINT_LATEST = "/tasks/api/currency-exchange-rates"
 //const val API_KEY = "HBhvWzrB3TBTh6k4C3nK6ybfggmoRrn4"
 val CURENCIES_FOR_DEFAULT_DATA = listOf("EUR")
 const val INITIAL_BALANCE = 1000.0
+const val NETWORK_CALL_DELAY = 5 * 1000L
+
+const val COMMISSION_RATE = 0.7
+const val MAX_FREE_CONVERSION_AMOUNT = 200.0
+const val MAX_FREE_CONVERSION = 5
