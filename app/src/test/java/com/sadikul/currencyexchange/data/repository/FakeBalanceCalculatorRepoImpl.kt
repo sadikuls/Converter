@@ -1,13 +1,13 @@
 package com.sadikul.currencyexchange.data.repository
 
 import com.sadikul.currencyexchange.data.local.db.entity.AccountBalanceEntity
+import com.sadikul.currencyexchange.data.local.db.entity.toBalanceModel
 import com.sadikul.currencyexchange.data.remote.dto.Currency
 import com.sadikul.currencyexchange.domain.model.CurrencyBalanceModel
 import com.sadikul.currencyexchange.domain.model.toEntity
 import com.sadikul.currencyexchange.domain.repository.BalanceCalculatorRepo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import org.junit.Assert.*
 
 class FakeBalanceCalculatorRepoImpl : BalanceCalculatorRepo {
 
@@ -28,39 +28,22 @@ class FakeBalanceCalculatorRepoImpl : BalanceCalculatorRepo {
         balancelist.add(item.toEntity())
     }
 
-    override suspend fun getNumberOfConversion(): Int {
-        return numberOfonversion
+    override suspend fun getCurrencyDetails(currencyName: String): CurrencyBalanceModel {
+        return balancelist.find { it.currency == currencyName }?.toBalanceModel() ?: CurrencyBalanceModel(currency = currencyName)
     }
 
-    override suspend fun saveConversionCount(count: Int) {
-        numberOfonversion+= count
-    }
-
-    override suspend fun getTotalConvertedAmount(): Double {
-        return totalConvertedAmount
-    }
-
-    override suspend fun saveConvertedAmount(amount: Double) {
-        totalConvertedAmount+= amount
-    }
-
-    override suspend fun getBalance(currencyName: String): Double {
-        val balance = balancelist.find { it.currency == currencyName }?.balance
-        if(balance != null) return balance
-        return 0.0
-    }
-
-    override suspend fun initializeBalance(currencies: List<Currency>) {
+    override suspend fun initializeBalance(currencies: List<Currency>, currenciesToSetDefaultValue: List<String>, initialBalance: Double) {
         var items = currencies.map { currency ->
             AccountBalanceEntity(
                 currency = currency.currencyName,
-                balance = 0.0
+                balance = if(currenciesToSetDefaultValue.contains(currency.currencyName))  initialBalance else 0.0,
+                conversionCount = 0,
+                soldAmount = 0.0
             )
         }
-
-        val listToInsert = items.filterNot { it.currency == "EUR" }.toMutableList()
-        listToInsert.add(AccountBalanceEntity("EUR",1000.0))
-        balancelist.addAll(listToInsert)
+/*        val listToInsert = items.filterNot { it.currency == "EUR" }.toMutableList()
+        listToInsert.add(AccountBalanceEntity("EUR",1000.0))*/
+        balancelist.addAll(items)
     }
 
     override suspend fun getCount(): Int {

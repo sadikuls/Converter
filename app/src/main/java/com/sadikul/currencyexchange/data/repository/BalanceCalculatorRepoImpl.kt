@@ -2,6 +2,7 @@ package com.sadikul.currencyexchange.data.repository
 import com.sadikul.currencyexchange.data.local.Preference.PreferenceManager
 import com.sadikul.currencyexchange.data.local.db.AppDatabase
 import com.sadikul.currencyexchange.data.local.db.entity.AccountBalanceEntity
+import com.sadikul.currencyexchange.data.local.db.entity.toBalanceModel
 import com.sadikul.currencyexchange.data.remote.dto.Currency
 import com.sadikul.currencyexchange.domain.model.CurrencyBalanceModel
 import com.sadikul.currencyexchange.domain.repository.BalanceCalculatorRepo
@@ -20,41 +21,33 @@ class BalanceCalculatorRepoImpl @Inject constructor(private val appDatabase: App
     override suspend fun getAccountBalances(): Flow<List<AccountBalanceEntity>> = appDatabase.balanceDao().getBalanceList()
     override suspend fun getBalanceList(): List<AccountBalanceEntity> = appDatabase.balanceDao().getBalanceListWithoutFlow()
 
-    override suspend fun updateBalance(currency: CurrencyBalanceModel) = appDatabase.balanceDao().updateBalance(currency.currency,currency.balance)
+    override suspend fun updateBalance(currency: CurrencyBalanceModel) = appDatabase.balanceDao()
+        .updateBalance(
+            currency.currency,
+            currency.balance,
+            currency.soldAmount,
+            currency.conversionCount
+        )
 
-    override suspend fun getNumberOfConversion() = appPreference.numberOfConversion
-
-    override suspend fun saveConversionCount(count: Int) {
-        appPreference.numberOfConversion += count
+    override suspend fun getCurrencyDetails(currencyName: String): CurrencyBalanceModel {
+        return appDatabase.balanceDao().getBalance(currencyName).toBalanceModel()
     }
 
-    override suspend fun getTotalConvertedAmount(): Double {
-        appPreference.totalConvertedAmount?.let {
-                return it
-        }
-        return 0.0
-    }
-
-    override suspend fun saveConvertedAmount(amount: Double) {
-        appPreference.totalConvertedAmount?.let {
-            appPreference.totalConvertedAmount = it+amount
-        }
-    }
-
-    override suspend fun getBalance(currencyName: String): Double = appDatabase.balanceDao().getBalance(currencyName)
-
-    override suspend fun initializeBalance(currencies: List<Currency>) {
+    override suspend fun initializeBalance(
+        currencies: List<Currency>,
+        currenciesToSetDefaultValue: List<String>,
+        initialBalance: Double
+    ) {
         var balanceList = currencies.map { currency ->
             AccountBalanceEntity(
                 currency = currency.currencyName,
-                balance = 0.0
+                balance = if(currenciesToSetDefaultValue.contains(currency.currencyName)) initialBalance else 0.0,
+                conversionCount = 0,
+                soldAmount = 0.0
             )
         }
-        appDatabase.balanceDao().apply {
-            val listToInsert = balanceList.filterNot { it.currency == "EUR" }.toMutableList()
-            listToInsert.add(AccountBalanceEntity("EUR",1000.0))
-            insertAll(listToInsert)
-        }
+        appDatabase.balanceDao().insertAll(balanceList)
+
     }
 
     override suspend fun getCount() = appDatabase.balanceDao().getItemCount()

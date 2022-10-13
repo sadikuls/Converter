@@ -14,10 +14,20 @@ interface AccountBalanceDao {
     suspend fun insert(entity: CurrencyEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll( entities: List<AccountBalanceEntity>)
+    suspend fun insertAll(entities: List<AccountBalanceEntity>)
 
-    @Query("UPDATE account_balance SET balance = :balance WHERE currency = :currency")
-    suspend fun updateBalance(currency: String, balance: Double)
+    @Query("""
+        UPDATE account_balance 
+        SET balance = :balance 
+            and soldAmount = :soldAmount 
+            and conversionCount = :conversionCount 
+        WHERE currency = :currency""")
+    suspend fun updateBalance(
+        currency: String,
+        balance: Double,
+        soldAmount: Double,
+        conversionCount: Int
+    )
 
     @Query("SELECT * FROM account_balance order by balance desc")
     fun getBalanceList(): Flow<List<AccountBalanceEntity>>
@@ -28,7 +38,7 @@ interface AccountBalanceDao {
     @Query("SELECT count(currency) FROM account_balance")
     suspend fun getItemCount(): Int
 
-    @Query("SELECT balance FROM account_balance where currency = :currencyName")
-    suspend fun getBalance(currencyName:String): Double
+    @Query("SELECT * FROM account_balance where currency = :currencyName")
+    suspend fun getBalance(currencyName: String): AccountBalanceEntity
 
 }

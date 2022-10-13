@@ -1,10 +1,7 @@
 package com.sadikul.currencyexchange.core.di
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.sadikul.currencyexchange.core.utils.BASE_URL
-import com.sadikul.currencyexchange.core.utils.CONNECT_TIMEOUT_S
-import com.sadikul.currencyexchange.core.utils.READ_TIMEOUT_S
-import com.sadikul.currencyexchange.core.utils.WRITE_TIMEOUT_S
+import com.sadikul.currencyexchange.core.utils.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -48,7 +45,7 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(String().generateBase())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okHttpClient)
             .build()

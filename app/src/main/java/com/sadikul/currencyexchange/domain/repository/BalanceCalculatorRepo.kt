@@ -8,11 +8,7 @@ interface BalanceCalculatorRepo {
     suspend fun getAccountBalances(): Flow<List<AccountBalanceEntity>>
     suspend fun getBalanceList(): List<AccountBalanceEntity>
     suspend fun updateBalance(currency: CurrencyBalanceModel)
-    suspend fun getNumberOfConversion(): Int
-    suspend fun saveConversionCount(count: Int)
-    suspend fun getTotalConvertedAmount(): Double
-    suspend fun saveConvertedAmount(amount: Double)
-    suspend fun getBalance(currencyName: String): Double
-    suspend fun initializeBalance(currencies: List<Currency>)
+    suspend fun getCurrencyDetails(currencyName: String): CurrencyBalanceModel
+    suspend fun initializeBalance(currencies: List<Currency>, currenciesToSetDefaultValue: List<String>, initialBalance: Double)
     suspend fun getCount():Int
 }

@@ -18,6 +18,8 @@ object Util {
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
+
+
     inline fun <reified T> loadFromJson(
         context: Context, fileName: String
     ): Resource<T> {

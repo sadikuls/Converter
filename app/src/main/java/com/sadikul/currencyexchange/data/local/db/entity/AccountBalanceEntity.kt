@@ -12,7 +12,14 @@ data class AccountBalanceEntity(
     val currency: String,
 
     @ColumnInfo(name = "balance")
-    val balance: Double
+    val balance: Double,
+
+    @ColumnInfo(name = "soldAmount")
+    val soldAmount: Double,
+
+    @ColumnInfo(name = "conversionCount")
+    val conversionCount: Int
 )
 
-fun AccountBalanceEntity.toBalanceModel() = CurrencyBalanceModel(currency= currency, balance = balance)
+fun AccountBalanceEntity.toBalanceModel() =
+    CurrencyBalanceModel(currency = currency, balance = balance,soldAmount = soldAmount, conversionCount = conversionCount)
