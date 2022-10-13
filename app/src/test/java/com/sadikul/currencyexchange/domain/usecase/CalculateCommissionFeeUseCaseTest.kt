@@ -1,5 +1,6 @@
 package com.sadikul.currencyexchange.domain.usecase
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.sadikul.currencyexchange.core.utils.CURENCIES_FOR_DEFAULT_DATA
 import com.sadikul.currencyexchange.core.utils.INITIAL_BALANCE
 import com.sadikul.currencyexchange.core.utils.Resource
@@ -12,7 +13,9 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class CalculateCommissionFeeUseCaseTest{
     lateinit var balanceRepo: FakeBalanceCalculatorRepoImpl
     lateinit var currencyrepo: FakeCurrencyRepoImpl
@@ -30,7 +33,7 @@ class CalculateCommissionFeeUseCaseTest{
             currencyrepo.insertCurrencies((currencies as Resource.Success).data)
             //initialize balance data
             balanceRepo.initializeBalance(
-                (currencies as Resource.Success).data, CURENCIES_FOR_DEFAULT_DATA,
+                (currencies).data, CURENCIES_FOR_DEFAULT_DATA,
                 INITIAL_BALANCE
             )
         }

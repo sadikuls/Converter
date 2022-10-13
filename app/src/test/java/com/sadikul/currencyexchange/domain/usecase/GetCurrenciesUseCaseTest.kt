@@ -1,6 +1,7 @@
 package com.sadikul.currencyexchange.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import com.sadikul.currencyexchange.core.utils.Resource
@@ -13,7 +14,9 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class GetCurrenciesTest {
     private lateinit var useCase: GetCurrenciesUseCase
     lateinit var currencyrepo: FakeCurrencyRepoImpl
@@ -31,7 +34,7 @@ class GetCurrenciesTest {
         useCase(forceToGetRemoteData = true).collect(object : FlowCollector<Resource<List<Currency>>> {
             override suspend fun emit(value: Resource<List<Currency>>) {
                 assertThat((value as Resource.Success).data.isNotEmpty()).isTrue()
-                (value as Resource.Success).data.let {
+                value.data.let {
                     assertThat(value.data.size == 5).isTrue()
                     assertThat(value.data.find { it.currencyName == "EUR" }?.currencyValue == 1.0).isTrue()
                     assertThat(value.data.find { it.currencyName == "USD" }?.currencyValue == 0.969204).isTrue()

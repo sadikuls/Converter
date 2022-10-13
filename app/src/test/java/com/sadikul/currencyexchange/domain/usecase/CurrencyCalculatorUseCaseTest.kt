@@ -1,6 +1,7 @@
 package com.sadikul.currencyexchange.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth
 import com.sadikul.currencyexchange.core.utils.Resource
 import com.sadikul.currencyexchange.data.remote.dto.Currency
@@ -14,7 +15,9 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class CurrencyCalculatorUseCaseTest{
     private lateinit var useCase: CurrencyCalculatorUseCase
     lateinit var currencyrepo: FakeCurrencyRepoImpl
@@ -48,7 +51,7 @@ class CurrencyCalculatorUseCaseTest{
             FlowCollector<Resource<ConversionModel>> {
             override suspend fun emit(value: Resource<ConversionModel>) {
                 println("result of conversion ${(value as Resource.Success).data.convertedAmount}")
-                (value as Resource.Success).data.apply {
+                (value).data.apply {
                     assertTrue(fromCurrency == "EUR")
                     assertTrue(toCurrency == "USD")
                     assertTrue(fromAmount == 100.0)
@@ -65,8 +68,8 @@ class CurrencyCalculatorUseCaseTest{
             FlowCollector<Resource<ConversionModel>> {
             override suspend fun emit(value: Resource<ConversionModel>) {
                 println("result of conversion ${(value as Resource.Error).message}")
-                assertTrue((value as Resource.Error).data == null)
-                assertTrue((value as Resource.Error).message == errorMessage)
+                assertTrue((value).data == null)
+                assertTrue((value).message == errorMessage)
             }
         })
     }
@@ -77,8 +80,8 @@ class CurrencyCalculatorUseCaseTest{
             FlowCollector<Resource<ConversionModel>> {
             override suspend fun emit(value: Resource<ConversionModel>) {
                 println("result of conversion ${(value as Resource.Error).message}")
-                assertTrue((value as Resource.Error).data == null)
-                assertTrue((value as Resource.Error).message == errorMessage)
+                assertTrue((value).data == null)
+                assertTrue((value).message == errorMessage)
             }
         })
     }
@@ -89,8 +92,8 @@ class CurrencyCalculatorUseCaseTest{
             FlowCollector<Resource<ConversionModel>> {
             override suspend fun emit(value: Resource<ConversionModel>) {
                 println("result of conversion ${(value as Resource.Error).message}")
-                assertTrue((value as Resource.Error).data == null)
-                assertTrue((value as Resource.Error).message == errorMessage)
+                assertTrue((value).data == null)
+                assertTrue((value).message == errorMessage)
             }
         })
     }
