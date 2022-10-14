@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -57,7 +58,7 @@ class ConversionFragment : Fragment() {
     fun setSplashy(){
         Splashy(requireActivity())    // For JAVA : new Splashy(this)
             .setLogo(R.drawable.usd_euro_transparent)
-            .setTitle("Currency Exchanger")
+            .setTitle("Currency Converter")
             .setTitleColor("#009be0")
             .setSubTitle("Make life EASY")
             .setSubTitleColor(R.color.main_color)
@@ -184,7 +185,7 @@ class ConversionFragment : Fragment() {
                 ivArrow.background = resources.getDrawable(R.drawable.up_down_bg, null)
                 tvTextSellOrBuy.text = "Receive"
                 inputTextAmount.isEnabled = false
-                //inputTextAmount.setTextColor(resources.getColor(R.color.buy_color, null))
+                inputTextAmount.setTextColor(ContextCompat.getColor(requireContext(), R.color.buy_color))
                 inputTextAmount.setBackgroundResource(android.R.color.transparent);
 
             }
