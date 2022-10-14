@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/conversionFragment"
         tools:layout="@layout/layout_currency_conversion_fragment"
-        android:name="com.sadikul.currencyexchange.presentation.currencyconversion.ConversionFragment"
+        android:name="com.sadikul.currencyexchange.presentation.currencyconversionscreen.ConversionFragment"
         android:label="ConversionFragment" >
     </fragment>
 </navigation>

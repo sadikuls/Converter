@@ -1,4 +1,4 @@
-package com.sadikul.currencyexchange.presentation.currencyconversion
+package com.sadikul.currencyexchange.presentation.currencyconversionscreen
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,7 +9,7 @@ import com.sadikul.currencyexchange.core.utils.Resource
 import com.sadikul.currencyexchange.data.remote.dto.Currency
 import com.sadikul.currencyexchange.domain.model.ConversionModel
 import com.sadikul.currencyexchange.domain.usecase.*
-import com.sadikul.currencyexchange.presentation.currencyconversion.states.*
+import com.sadikul.currencyexchange.presentation.currencyconversionscreen.states.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*

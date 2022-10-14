@@ -1,4 +1,4 @@
-package com.sadikul.currencyexchange.presentation.currencyconversion.states
+package com.sadikul.currencyexchange.presentation.currencyconversionscreen.states
 import com.sadikul.currencyexchange.data.remote.dto.Currency
 
 data class CurrencyListState(

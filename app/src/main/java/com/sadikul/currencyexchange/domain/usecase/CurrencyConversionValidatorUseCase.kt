@@ -2,11 +2,9 @@ package com.sadikul.currencyexchange.domain.usecase
 import com.sadikul.currencyexchange.core.utils.stringValueUptoFourDecimalPlace
 import com.sadikul.currencyexchange.domain.repository.BalanceCalculatorRepo
 import com.sadikul.currencyexchange.domain.model.ConversionModel
-import com.sadikul.currencyexchange.presentation.currencyconversion.states.ValidatorState
-import kotlinx.coroutines.Dispatchers
+import com.sadikul.currencyexchange.presentation.currencyconversionscreen.states.ValidatorState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class CurrencyConversionValidatorUseCase @Inject constructor(

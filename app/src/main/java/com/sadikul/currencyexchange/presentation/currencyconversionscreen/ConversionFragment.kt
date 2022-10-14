@@ -1,4 +1,4 @@
-package com.sadikul.currencyexchange.presentation.currencyconversion
+package com.sadikul.currencyexchange.presentation.currencyconversionscreen
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.rbddevs.splashy.Splashy
 import com.sadikul.currencyexchange.R
 import com.sadikul.currencyexchange.core.utils.Util
 import com.sadikul.currencyexchange.core.utils.stringValueUptoFourDecimalPlace
@@ -42,13 +43,29 @@ class ConversionFragment : Fragment() {
         return binding.root
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setSplashy()
         setupUi()
         setupRecyclerView()
         observeData()
     }
 
+
+    fun setSplashy(){
+        Splashy(requireActivity())    // For JAVA : new Splashy(this)
+            .setLogo(R.drawable.usd_euro_transparent)
+            .setTitle("Currency Exchanger")
+            .setTitleColor("#009be0")
+            .setSubTitle("Make life EASY")
+            .setSubTitleColor(R.color.main_color)
+            .setProgressColor(R.color.main_color)
+            .setFullScreen(true)
+            .setTime(3000)
+            .show()
+    }
 
     private fun observeData() {
         lifecycleScope.launchWhenStarted {

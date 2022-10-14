@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
-    tools:context="com.sadikul.currencyexchange.presentation.currencyconversion.ConversionFragment"
+    tools:context="com.sadikul.currencyexchange.presentation.currencyconversionscreen.ConversionFragment"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
