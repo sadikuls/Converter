@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sadikul.currencyexchange.R
 import com.sadikul.currencyexchange.core.utils.Util
 import com.sadikul.currencyexchange.core.utils.stringValueUptoFourDecimalPlace
-import com.sadikul.currencyexchange.core.utils.stringValueUptoTwoDecimalPlace
 import com.sadikul.currencyexchange.data.remote.dto.Currency
 import com.sadikul.currencyexchange.databinding.LayoutCurrencyConversionFragmentBinding
 import com.sadikul.currencyexchange.domain.adapter.BalanceListAdapter
@@ -95,7 +94,7 @@ class ConversionFragment : Fragment() {
                         Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
                     }
                     it.conversionData?.let {
-                        inputTextAmount.setText("+${Double.stringValueUptoTwoDecimalPlace(it.convertedAmount)}")
+                        inputTextAmount.setText("+${Double.stringValueUptoFourDecimalPlace(it.convertedAmount)}")
                     }
                 }
             }
@@ -105,8 +104,8 @@ class ConversionFragment : Fragment() {
             viewModel.submissionState.collectLatest {
                 it.conversionModel?.apply {
                     val message =
-                        "You have converted ${Double.stringValueUptoTwoDecimalPlace(fromAmount)} ${fromCurrency} to " +
-                                "${Double.stringValueUptoTwoDecimalPlace(convertedAmount)} ${toCurrency}." +
+                        "You have converted ${Double.stringValueUptoFourDecimalPlace(fromAmount)} ${fromCurrency} to " +
+                                "${Double.stringValueUptoFourDecimalPlace(convertedAmount)} ${toCurrency}." +
                                 if (commission > 0) " Commission Fee - ${
                                     Double.stringValueUptoFourDecimalPlace(
                                         commission

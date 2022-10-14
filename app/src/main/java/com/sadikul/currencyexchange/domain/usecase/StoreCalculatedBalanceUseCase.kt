@@ -18,7 +18,7 @@ class StoreCalculatedBalanceUseCase @Inject constructor(private val repo: Balanc
                     currency = it.currency,
                     balance = it.balance - (conversionModel.fromAmount + conversionModel.commission),
                     soldAmount = it.soldAmount + conversionModel.fromAmount,
-                    conversionCount = it.conversionCount
+                    conversionCount = it.conversionCount + 1
                 )
             )
         }

@@ -1,5 +1,4 @@
 package com.sadikul.currencyexchange.domain.usecase
-import com.sadikul.currencyexchange.data.remote.dto.Currency
 import com.sadikul.currencyexchange.domain.repository.BalanceCalculatorRepo
 import javax.inject.Inject
 

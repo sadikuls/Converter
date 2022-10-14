@@ -1,5 +1,5 @@
 package com.sadikul.currencyexchange.domain.usecase
-import com.sadikul.currencyexchange.core.utils.stringValueUptoTwoDecimalPlace
+import com.sadikul.currencyexchange.core.utils.stringValueUptoFourDecimalPlace
 import com.sadikul.currencyexchange.domain.repository.BalanceCalculatorRepo
 import com.sadikul.currencyexchange.domain.model.ConversionModel
 import com.sadikul.currencyexchange.presentation.currencyconversion.states.ValidatorState
@@ -25,11 +25,11 @@ class CurrencyConversionValidatorUseCase @Inject constructor(
                         ValidatorState(
                             false,
                             "Insufficient balance. Required ${
-                                Double.stringValueUptoTwoDecimalPlace(
+                                Double.stringValueUptoFourDecimalPlace(
                                     data.fromAmount + data.commission
                                 )
                             } ${data.fromCurrency}. Current balance ${
-                                Double.stringValueUptoTwoDecimalPlace(
+                                Double.stringValueUptoFourDecimalPlace(
                                     balance
                                 )
                             } ${data.fromCurrency}"
