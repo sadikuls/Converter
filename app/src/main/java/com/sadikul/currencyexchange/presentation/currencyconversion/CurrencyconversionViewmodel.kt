@@ -18,9 +18,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CurrencyconversionViewmodel @Inject constructor(
-    private val currenciesUseCase: GetCurrenciesUseCase,
+    private val currenciesUseCase: GetCurrenciesUseCaseWithXtimesRequest,
     private val balanceListUseCase: BalanceListUseCase,
-    private val balanceListGeneratorUseCase: BalanceListInitializeUseCase,
+    private val initialBalanceGeneratorUseCase: BalanceListInitializeUseCase,
     private val submitBalanceUseCase: StoreCalculatedBalanceUseCase,
     private val commissionCalculatorUseCase: CommissionFeeCalculatorUseCase,
     private val currencyConversionUseCase: CurrencyCalculatorUseCase,
@@ -30,8 +30,8 @@ class CurrencyconversionViewmodel @Inject constructor(
     private val getToCurrencyUseCase: GetToCurrencyUseCase,
     private val validatorUseCase: CurrencyConversionValidatorUseCase,
 ): ViewModel() {
-    private val _state = MutableStateFlow(CurrencyListState())
-    val currencyListState get() = _state.asStateFlow()
+    private val _currencystate = MutableStateFlow(CurrencyListState())
+    val currencyListState get() = _currencystate.asStateFlow()
 
     private val _balanceState = MutableStateFlow(BalanceListState())
     val balanceListState get() = _balanceState.asStateFlow()
@@ -69,6 +69,7 @@ class CurrencyconversionViewmodel @Inject constructor(
 
     private fun getBalances() {
         viewModelScope.launch(Dispatchers.IO) {
+            initialBalanceGeneratorUseCase()
             balanceListUseCase().onEach {
                 _balanceState.value = BalanceListState(it)
             }.launchIn(this)
@@ -76,25 +77,33 @@ class CurrencyconversionViewmodel @Inject constructor(
     }
 
     private fun getCurrencies() = viewModelScope.launch(Dispatchers.IO) {
-            currenciesUseCase().onEach {
-                when (it) {
-                    is Resource.Loading -> {
-                        _state.value = CurrencyListState(isLoading = true)
-                    }
-                    is Resource.Error -> {
-                        _state.value = CurrencyListState(error = "Something went wrong.")
-                    }
-                    is Resource.Success -> {
-                        _state.value = CurrencyListState(isLoading = false)
-                        it.data.let {
-                            balanceListGeneratorUseCase(it)
-                            Log.w("CurrencyValue","success : "+it.size)
-                            _state.value = CurrencyListState(items = it)
-                        }
+        currenciesUseCase().onEach {
+            when (it) {
+                is Resource.Loading -> {
+                    Log.w("CurrencyValue", "loding : data size" + it.data?.size)
+                    if(it.data != null){
+                        _currencystate.value = CurrencyListState(items = it.data,isLoading = true)
+                    }else{
+                        _currencystate.value = CurrencyListState(isLoading = true)
                     }
                 }
-            }.launchIn(this)
-        }
+                is Resource.Error -> {
+                    //_currencystate.value = CurrencyListState(isLoading = false)
+                    Log.w("CurrencyValue", "error : data size" + it.data?.size)
+                    if(it.data == null){
+                        _currencystate.value = CurrencyListState(error = it.message)
+                    }else{
+                        _currencystate.value = CurrencyListState(items = it.data, error = it.message)
+                    }
+                }
+                is Resource.Success -> {
+                    Log.w("CurrencyValue", "success : data size" + it.data.size)
+                    _currencystate.value = CurrencyListState(items = it.data)
+
+                }
+            }
+        }.launchIn(this)
+    }
 
 
     fun convertCurrency(fromCurrency: String,toCurrency: String,amount: Double) = viewModelScope.launch(Dispatchers.IO) {

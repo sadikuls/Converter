@@ -4,7 +4,7 @@ import com.sadikul.currencyexchange.data.remote.dto.Currency
 import kotlinx.coroutines.flow.Flow
 
 interface CurrencyconversionRepo {
-    suspend fun getCurrencies(latest: Boolean = false): Flow<Resource<List<Currency>>>
+    suspend fun getCurrencies(): Flow<Resource<List<Currency>>>
     suspend fun getCurrenciesFromLocal(): List<Currency>
     suspend fun insertCurrencies(currencies: List<Currency>)
     suspend fun getRate(currencyName:String):Double

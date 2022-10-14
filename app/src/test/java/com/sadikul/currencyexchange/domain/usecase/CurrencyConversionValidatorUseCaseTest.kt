@@ -9,6 +9,7 @@ import com.sadikul.currencyexchange.data.repository.FakeBalanceCalculatorRepoImp
 import com.sadikul.currencyexchange.data.repository.FakeCurrencyRepoImpl
 import com.sadikul.currencyexchange.domain.model.ConversionModel
 import com.sadikul.currencyexchange.presentation.currencyconversion.states.ValidatorState
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -18,6 +19,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@OptIn(InternalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
 class CurrencyConversionValidatorUseCaseTest{
     private lateinit var useCase: CurrencyConversionValidatorUseCase
@@ -33,14 +35,11 @@ class CurrencyConversionValidatorUseCaseTest{
         balanceRepo = FakeBalanceCalculatorRepoImpl()
         runBlocking {
             //Get all currency
-            val currencies = currencyrepo.getCurrencies(true).first()
+            val currencies = currencyrepo.getCurrencies().first()
             //insert currencies to db
             currencyrepo.insertCurrencies((currencies as Resource.Success).data)
             //initialize balance data
-            balanceRepo.initializeBalance(
-                (currencies).data, CURENCIES_FOR_DEFAULT_DATA,
-                INITIAL_BALANCE
-            )
+            balanceRepo.initializeBalance()
 
             useCase = CurrencyConversionValidatorUseCase(balanceRepo)
         }

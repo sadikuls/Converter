@@ -1,19 +1,22 @@
 package com.sadikul.currencyexchange.data.repository
-
-import android.util.Log
 import com.sadikul.currencyexchange.core.utils.Resource
-import com.sadikul.currencyexchange.core.utils.safeApiCall
 import com.sadikul.currencyexchange.data.local.Preference.PreferenceManager
 import com.sadikul.currencyexchange.data.local.db.AppDatabase
+import com.sadikul.currencyexchange.data.local.db.entity.CurrencyEntity
 import com.sadikul.currencyexchange.data.local.db.entity.toCurrency
 import com.sadikul.currencyexchange.data.remote.ApiService.CurrencyApiService
+import com.sadikul.currencyexchange.data.remote.NetworkHelper
+import com.sadikul.currencyexchange.data.remote.NetworkHelper.Companion.MESSAGE_SERVER_NOT_REACABLE
+import com.sadikul.currencyexchange.data.remote.NetworkHelper.Companion.NETWORK_CHECK_ERROR
 import com.sadikul.currencyexchange.data.remote.dto.Currency
 import com.sadikul.currencyexchange.data.remote.dto.toCurrencyEntity
 import com.sadikul.currencyexchange.domain.repository.CurrencyconversionRepo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.transform
+import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * params
@@ -23,22 +26,39 @@ import javax.inject.Inject
 class CurrencyRepoImpl @Inject constructor(
     private val apiService: CurrencyApiService,
     private val appDatabase: AppDatabase,
-    private val appPreference: PreferenceManager
+    private val appPreference: PreferenceManager,
+    private val networkHelper: NetworkHelper
 ) : CurrencyconversionRepo {
-    private val mTag = "CurrencyRepoImpl"
+    //private val mTag = "CurrencyRepoImpl"
 
-
-    override suspend fun getCurrencies(latest: Boolean): Flow<Resource<List<Currency>>> =
-        safeApiCall {
-            apiService.getData()
-        }.transform {
-            if (it is Resource.Success) {
-                val data = it.data.rates.map {
-                    Currency(it.key, it.value)
-                }
-                emit(Resource.Success(data))
-            } else emit(it as Resource<List<Currency>>)
+    override suspend fun getCurrencies(): Flow<Resource<List<Currency>>> = flow {
+        val localData = appDatabase.currencyDao().getAllCurrency().map { it.toCurrency() }
+        if(!networkHelper.hasNetwork()){
+            emit(Resource.Error(data = localData, message = NETWORK_CHECK_ERROR))
+            return@flow
         }
+        try {
+            val remoteData = apiService.getData()
+            val data = remoteData.rates.map {
+                CurrencyEntity(it.key, it.value)
+            }
+            appDatabase.currencyDao().insertAll(data)
+        } catch (e: HttpException) {
+            emit(
+                Resource.Error(
+                    message = "Oops, something went wrong!"
+                )
+            )
+        } catch (e: IOException) {
+            emit(
+                Resource.Error(
+                    message = MESSAGE_SERVER_NOT_REACABLE
+                )
+            )
+        }
+        val currencies = appDatabase.currencyDao().getAllCurrency().map { it.toCurrency() }
+        emit(Resource.Success(currencies))
+    }
 
     override suspend fun getCurrenciesFromLocal(): List<Currency> {
         return appDatabase.currencyDao().getAllCurrency().map { it.toCurrency() }

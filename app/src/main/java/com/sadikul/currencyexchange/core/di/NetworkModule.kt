@@ -1,16 +1,25 @@
 package com.sadikul.currencyexchange.core.di
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.net.NetworkInfo
+import android.os.Build
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.sadikul.currencyexchange.core.utils.*
+import com.sadikul.currencyexchange.data.local.Preference.PreferenceManager
+import com.sadikul.currencyexchange.data.remote.NetworkHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -50,4 +59,9 @@ object NetworkModule {
             .client(okHttpClient)
             .build()
     }
+
+    @Singleton
+    @Provides
+    fun providePreferenceManager(@ApplicationContext context: Context): NetworkHelper =
+        NetworkHelper(context = context)
 }

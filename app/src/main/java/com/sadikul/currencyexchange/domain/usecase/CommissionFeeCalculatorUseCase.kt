@@ -13,12 +13,17 @@ class CommissionFeeCalculatorUseCase @Inject constructor(private val repo: Balan
         maxFreeAmount: Double
     ): Double {
         val commissionFeeZero = 0.0
-        val currencyDetails = repo.getCurrencyDetails(currencyName)
-        if (amount <= 0.0 || currencyDetails.conversionCount < maxFreeConversion) {
+        var conversionCount = 0
+        var soldAmount = 0.0
+        repo.getCurrencyDetails(currencyName)?.let {
+            conversionCount = it.conversionCount
+            soldAmount = it.soldAmount
+        }
+        if (amount <= 0.0 || conversionCount < maxFreeConversion) {
             return commissionFeeZero
-        } else if (currencyDetails.soldAmount <= maxFreeAmount) {
+        } else if (soldAmount <= maxFreeAmount) {
             val amountToApplyCommission =
-                amount - (maxFreeAmount - currencyDetails.soldAmount)
+                amount - (maxFreeAmount - soldAmount)
             if (amountToApplyCommission <= 0.0) return commissionFeeZero
            return rate * amountToApplyCommission / 100
         }

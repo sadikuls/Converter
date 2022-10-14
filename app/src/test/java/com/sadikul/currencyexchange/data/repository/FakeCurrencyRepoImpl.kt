@@ -12,13 +12,14 @@ class FakeCurrencyRepoImpl : CurrencyconversionRepo {
     var fromCurrency: Currency? = null
     var toCurrency: Currency? = null
 
-    override suspend fun getCurrencies(latest: Boolean): Flow<Resource<List<Currency>>> = flow {
+    override suspend fun getCurrencies(): Flow<Resource<List<Currency>>> = flow {
         val list = mutableListOf<Currency>()
         list.add(Currency("EUR", 1.0))
         list.add(Currency("USD", 0.969204))
         list.add(Currency("BDT", 98.546494))
         list.add(Currency("AED", 3.559867))
         list.add(Currency("JPY", 142.374546))
+        insertCurrencies(list)
         emit(Resource.Success(list.toList()))
     }.flowOn(Dispatchers.IO)
 

@@ -19,7 +19,7 @@ class CurrencyConversionValidatorUseCase @Inject constructor(
             } else if (data.fromCurrency.equals(data.toCurrency)) {
                 emit(ValidatorState(false, "Please select differenct currency."))
             } else {
-                val balance = repo.getCurrencyDetails(data.fromCurrency).balance
+                val balance = repo.getCurrencyDetails(data.fromCurrency)?.balance ?: 0.0
                 if (data.fromAmount + data.commission > balance) {
                     emit(
                         ValidatorState(
@@ -40,5 +40,5 @@ class CurrencyConversionValidatorUseCase @Inject constructor(
                 }
             }
         }
-    }.flowOn(Dispatchers.IO)
+    }
 }

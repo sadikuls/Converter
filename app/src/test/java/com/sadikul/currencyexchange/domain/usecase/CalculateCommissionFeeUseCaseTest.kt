@@ -28,14 +28,11 @@ class CalculateCommissionFeeUseCaseTest{
         balanceRepo = FakeBalanceCalculatorRepoImpl()
         runBlocking {
             //Get all currency
-            val currencies = currencyrepo.getCurrencies(true).first()
+            val currencies = currencyrepo.getCurrencies().first()
             //insert currencies to db
             currencyrepo.insertCurrencies((currencies as Resource.Success).data)
             //initialize balance data
-            balanceRepo.initializeBalance(
-                (currencies).data, CURENCIES_FOR_DEFAULT_DATA,
-                INITIAL_BALANCE
-            )
+            balanceRepo.initializeBalance()
         }
     }
 
@@ -60,7 +57,7 @@ class CalculateCommissionFeeUseCaseTest{
 
     @Test
     fun calculateCurrencyWhenAppliedMaxFreeAmountRule() = runBlocking{
-        balanceRepo.getCurrencyDetails("EUR").let {
+        balanceRepo.getCurrencyDetails("EUR")?.let {
             balanceRepo.updateBalance(
                 CurrencyBalanceModel(
                     currency = it.currency,
@@ -71,7 +68,7 @@ class CalculateCommissionFeeUseCaseTest{
             )
         }
         assertTrue(CommissionFeeCalculatorUseCase(repo = balanceRepo)(20.0, "EUR", 1.7, 0, 20.0) == 0.17)
-        balanceRepo.getCurrencyDetails("EUR").let {
+        balanceRepo.getCurrencyDetails("EUR")?.let {
             balanceRepo.updateBalance(
                 CurrencyBalanceModel(
                     currency = it.currency,
@@ -92,7 +89,7 @@ class CalculateCommissionFeeUseCaseTest{
 
     @Test
     fun calculateCurrencyWhenAppliedFreeConversionRuleSameAmount() = runBlocking{
-        balanceRepo.getCurrencyDetails("EUR").let {
+        balanceRepo.getCurrencyDetails("EUR")?.let {
             balanceRepo.updateBalance(
                 CurrencyBalanceModel(
                     currency = it.currency,

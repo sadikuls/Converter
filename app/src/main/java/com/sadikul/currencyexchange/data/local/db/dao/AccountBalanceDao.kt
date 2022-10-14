@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface AccountBalanceDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(entity: CurrencyEntity)
+    suspend fun insert(entity: AccountBalanceEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(entities: List<AccountBalanceEntity>)
@@ -19,8 +19,8 @@ interface AccountBalanceDao {
     @Query("""
         UPDATE account_balance 
         SET balance = :balance 
-            and soldAmount = :soldAmount 
-            and conversionCount = :conversionCount 
+            , soldAmount = :soldAmount 
+            , conversionCount = :conversionCount 
         WHERE currency = :currency""")
     suspend fun updateBalance(
         currency: String,
@@ -39,6 +39,6 @@ interface AccountBalanceDao {
     suspend fun getItemCount(): Int
 
     @Query("SELECT * FROM account_balance where currency = :currencyName")
-    suspend fun getBalance(currencyName: String): AccountBalanceEntity
+    suspend fun getBalance(currencyName: String): AccountBalanceEntity?
 
 }

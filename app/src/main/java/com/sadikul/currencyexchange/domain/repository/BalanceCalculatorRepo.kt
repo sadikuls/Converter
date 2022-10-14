@@ -7,8 +7,9 @@ import kotlinx.coroutines.flow.Flow
 interface BalanceCalculatorRepo {
     suspend fun getAccountBalances(): Flow<List<AccountBalanceEntity>>
     suspend fun getBalanceList(): List<AccountBalanceEntity>
+    suspend fun insertBalance(currency: CurrencyBalanceModel)
     suspend fun updateBalance(currency: CurrencyBalanceModel)
-    suspend fun getCurrencyDetails(currencyName: String): CurrencyBalanceModel
-    suspend fun initializeBalance(currencies: List<Currency>, currenciesToSetDefaultValue: List<String>, initialBalance: Double)
+    suspend fun getCurrencyDetails(currencyName: String): AccountBalanceEntity?
+    suspend fun initializeBalance()
     suspend fun getCount():Int
 }

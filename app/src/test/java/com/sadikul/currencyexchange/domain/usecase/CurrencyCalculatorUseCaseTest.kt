@@ -5,8 +5,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.sadikul.currencyexchange.core.utils.Resource
 import com.sadikul.currencyexchange.data.repository.FakeCurrencyRepoImpl
 import com.sadikul.currencyexchange.domain.model.ConversionModel
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Before
@@ -14,6 +14,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@OptIn(InternalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
 class CurrencyCalculatorUseCaseTest{
     private lateinit var useCase: CurrencyCalculatorUseCase
@@ -26,7 +27,7 @@ class CurrencyCalculatorUseCaseTest{
     fun setup() {
         currencyrepo = FakeCurrencyRepoImpl()
         runBlocking {
-            val currencies = currencyrepo.getCurrencies(true).first()
+            val currencies = currencyrepo.getCurrencies().first()
             currencyrepo.insertCurrencies((currencies as Resource.Success).data)
             useCase = CurrencyCalculatorUseCase(currencyrepo)
         }
@@ -71,6 +72,7 @@ class CurrencyCalculatorUseCaseTest{
         })
     }
 
+
     @Test
     fun currencyCalculationCheckWithWrongToCurrency() = runBlocking{
         useCase("EUR", "", 100.0).collect(object :
@@ -84,14 +86,16 @@ class CurrencyCalculatorUseCaseTest{
     }
 
     @Test
-    fun currencyCalculationCheckWithWrongCurrencyValue() = runBlocking{
-        useCase("EUR", "USD", 0.0).collect(object :
-            FlowCollector<Resource<ConversionModel>> {
-            override suspend fun emit(value: Resource<ConversionModel>) {
-                println("result of conversion ${(value as Resource.Error).message}")
-                assertTrue((value).data == null)
-                assertTrue((value).message == errorMessage)
-            }
-        })
+    fun currencyCalculationCheckWithWrongCurrencyValue() = runBlocking {
+        useCase("EUR", "USD", 0.0).collectLatest {
+            (object :
+                FlowCollector<Resource<ConversionModel>> {
+                override suspend fun emit(value: Resource<ConversionModel>) {
+                    println("result of conversion ${(value as Resource.Error).message}")
+                    assertTrue((value).data == null)
+                    assertTrue((value).message == errorMessage)
+                }
+            })
+        }
     }
 }

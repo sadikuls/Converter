@@ -9,25 +9,41 @@ class StoreCalculatedBalanceUseCase @Inject constructor(private val repo: Balanc
     operator suspend fun invoke(
         conversionModel: ConversionModel
     ) {
-        repo.getCurrencyDetails(conversionModel.fromCurrency).apply {
+        val fromCurrencyDetails = repo.getCurrencyDetails(conversionModel.fromCurrency)
+        val toCurrencyDetails = repo.getCurrencyDetails(conversionModel.toCurrency)
+
+        fromCurrencyDetails?.let{
             repo.updateBalance(
                 CurrencyBalanceModel(
-                    currency = this.currency,
-                    balance = this.balance - (conversionModel.fromAmount + conversionModel.commission),
-                    soldAmount = this.soldAmount + conversionModel.fromAmount,
-                    conversionCount = this.conversionCount
+                    currency = it.currency,
+                    balance = it.balance - (conversionModel.fromAmount + conversionModel.commission),
+                    soldAmount = it.soldAmount + conversionModel.fromAmount,
+                    conversionCount = it.conversionCount
                 )
             )
         }
-        repo.getCurrencyDetails(conversionModel.toCurrency).apply {
-            repo.updateBalance(
+
+        if(toCurrencyDetails != null){
+            toCurrencyDetails.let {
+                repo.updateBalance(
+                    CurrencyBalanceModel(
+                        currency = it.currency,
+                        balance = it.balance + conversionModel.convertedAmount,
+                        soldAmount = it.soldAmount,
+                        conversionCount = it.conversionCount
+                    )
+                )
+            }
+        }else{
+            repo.insertBalance(
                 CurrencyBalanceModel(
-                    currency = this.currency,
-                    balance = balance + conversionModel.convertedAmount,
-                    soldAmount = this.soldAmount,
-                    conversionCount = this.conversionCount
+                    currency = conversionModel.toCurrency,
+                    balance = conversionModel.convertedAmount,
+                    soldAmount = 0.0,
+                    conversionCount = 0
                 )
             )
+
         }
     }
 

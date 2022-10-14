@@ -7,6 +7,7 @@ import com.google.common.truth.Truth.assertThat
 import com.sadikul.currencyexchange.core.utils.Resource
 import com.sadikul.currencyexchange.data.remote.dto.Currency
 import com.sadikul.currencyexchange.data.repository.FakeCurrencyRepoImpl
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -16,6 +17,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@OptIn(InternalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
 class GetCurrenciesTest {
     private lateinit var useCase: GetCurrenciesUseCase

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_nav_graph"
+    app:startDestination="@id/conversionFragment">
+    <fragment
+        android:id="@+id/conversionFragment"
+        tools:layout="@layout/layout_currency_conversion_fragment"
+        android:name="com.sadikul.currencyexchange.presentation.currencyconversion.ConversionFragment"
+        android:label="ConversionFragment" >
+    </fragment>
+</navigation>

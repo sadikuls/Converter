@@ -7,8 +7,8 @@ import javax.inject.Inject
 
 class BalanceListInitializeUseCase @Inject constructor(private val repo: BalanceCalculatorRepo)
 {
-    operator  suspend fun invoke(currencyList: List<Currency>){
-        if(repo.getCount() == 0) repo.initializeBalance(currencyList, CURENCIES_FOR_DEFAULT_DATA,INITIAL_BALANCE)
+    operator  suspend fun invoke(){
+        if(repo.getCount() == 0) repo.initializeBalance()
     }
 
 }

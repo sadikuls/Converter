@@ -5,6 +5,7 @@ import com.sadikul.currencyexchange.data.local.db.entity.AccountBalanceEntity
 import com.sadikul.currencyexchange.data.local.db.entity.toBalanceModel
 import com.sadikul.currencyexchange.data.remote.dto.Currency
 import com.sadikul.currencyexchange.domain.model.CurrencyBalanceModel
+import com.sadikul.currencyexchange.domain.model.toEntity
 import com.sadikul.currencyexchange.domain.repository.BalanceCalculatorRepo
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -20,6 +21,9 @@ class BalanceCalculatorRepoImpl @Inject constructor(private val appDatabase: App
 
     override suspend fun getAccountBalances(): Flow<List<AccountBalanceEntity>> = appDatabase.balanceDao().getBalanceList()
     override suspend fun getBalanceList(): List<AccountBalanceEntity> = appDatabase.balanceDao().getBalanceListWithoutFlow()
+    override suspend fun insertBalance(currency: CurrencyBalanceModel) {
+        appDatabase.balanceDao().insert(currency.toEntity())
+    }
 
     override suspend fun updateBalance(currency: CurrencyBalanceModel) = appDatabase.balanceDao()
         .updateBalance(
@@ -29,25 +33,12 @@ class BalanceCalculatorRepoImpl @Inject constructor(private val appDatabase: App
             currency.conversionCount
         )
 
-    override suspend fun getCurrencyDetails(currencyName: String): CurrencyBalanceModel {
-        return appDatabase.balanceDao().getBalance(currencyName).toBalanceModel()
+    override suspend fun getCurrencyDetails(currencyName: String): AccountBalanceEntity? {
+        return appDatabase.balanceDao().getBalance(currencyName)
     }
 
-    override suspend fun initializeBalance(
-        currencies: List<Currency>,
-        currenciesToSetDefaultValue: List<String>,
-        initialBalance: Double
-    ) {
-        var balanceList = currencies.map { currency ->
-            AccountBalanceEntity(
-                currency = currency.currencyName,
-                balance = if(currenciesToSetDefaultValue.contains(currency.currencyName)) initialBalance else 0.0,
-                conversionCount = 0,
-                soldAmount = 0.0
-            )
-        }
-        appDatabase.balanceDao().insertAll(balanceList)
-
+    override suspend fun initializeBalance() {
+        appDatabase.balanceDao().insert(AccountBalanceEntity("EUR",1000.0,0.0,0))
     }
 
     override suspend fun getCount() = appDatabase.balanceDao().getItemCount()
