@@ -2,6 +2,7 @@ package com.sadikul.currencyexchange.data.repository
 import com.sadikul.currencyexchange.core.utils.Resource
 import com.sadikul.currencyexchange.data.local.Preference.PreferenceManager
 import com.sadikul.currencyexchange.data.local.db.AppDatabase
+import com.sadikul.currencyexchange.data.local.db.dao.CurrencyDao
 import com.sadikul.currencyexchange.data.local.db.entity.CurrencyEntity
 import com.sadikul.currencyexchange.data.local.db.entity.toCurrency
 import com.sadikul.currencyexchange.data.remote.ApiService.CurrencyApiService
@@ -25,14 +26,14 @@ import javax.inject.Named
  */
 class CurrencyRepoImpl @Inject constructor(
     private val apiService: CurrencyApiService,
-    private val appDatabase: AppDatabase,
+    private val currencyDao: CurrencyDao,
     private val appPreference: PreferenceManager,
     private val networkHelper: NetworkHelper
 ) : CurrencyconversionRepo {
     //private val mTag = "CurrencyRepoImpl"
 
     override suspend fun getCurrencies(): Flow<Resource<List<Currency>>> = flow {
-        val localData = appDatabase.currencyDao().getAllCurrency().map { it.toCurrency() }
+        val localData = currencyDao.getAllCurrency().map { it.toCurrency() }
         if(!networkHelper.hasNetwork()){
             emit(Resource.Error(data = localData, message = NETWORK_CHECK_ERROR))
             return@flow
@@ -42,7 +43,7 @@ class CurrencyRepoImpl @Inject constructor(
             val data = remoteData.rates.map {
                 CurrencyEntity(it.key, it.value)
             }
-            appDatabase.currencyDao().insertAll(data)
+            currencyDao.insertAll(data)
         } catch (e: HttpException) {
             emit(
                 Resource.Error(
@@ -56,22 +57,22 @@ class CurrencyRepoImpl @Inject constructor(
                 )
             )
         }
-        val currencies = appDatabase.currencyDao().getAllCurrency().map { it.toCurrency() }
+        val currencies = currencyDao.getAllCurrency().map { it.toCurrency() }
         emit(Resource.Success(currencies))
     }
 
     override suspend fun getCurrenciesFromLocal(): List<Currency> {
-        return appDatabase.currencyDao().getAllCurrency().map { it.toCurrency() }
+        return currencyDao.getAllCurrency().map { it.toCurrency() }
     }
 
     override suspend fun insertCurrencies(currencies: List<Currency>) {
-        appDatabase.currencyDao().insertAll(currencies.map { it.toCurrencyEntity() })
+        currencyDao.insertAll(currencies.map { it.toCurrencyEntity() })
     }
 
 
 
     override suspend fun getRate(currencyName: String) =
-        appDatabase.currencyDao().getCurrencyvalue(currencyName)
+        currencyDao.getCurrencyvalue(currencyName)
 
     override suspend fun getFromCurrency(): Currency {
         if(appPreference.fromCurrency == null) {

@@ -1,6 +1,8 @@
 package com.sadikul.currencyexchange.core.di
 import com.sadikul.currencyexchange.data.local.Preference.PreferenceManager
 import com.sadikul.currencyexchange.data.local.db.AppDatabase
+import com.sadikul.currencyexchange.data.local.db.dao.AccountBalanceDao
+import com.sadikul.currencyexchange.data.local.db.dao.CurrencyDao
 import com.sadikul.currencyexchange.data.remote.ApiService.CurrencyApiService
 import com.sadikul.currencyexchange.data.remote.NetworkHelper
 import com.sadikul.currencyexchange.data.repository.BalanceCalculatorRepoImpl
@@ -19,11 +21,11 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideCurrencyRepository(apiService: CurrencyApiService, appDatabase: AppDatabase, appPreference: PreferenceManager,networkHelper: NetworkHelper): CurrencyconversionRepo =
-        CurrencyRepoImpl(apiService,appDatabase, appPreference,networkHelper)
+    fun provideCurrencyRepository(apiService: CurrencyApiService, currencyDao: CurrencyDao, appPreference: PreferenceManager,networkHelper: NetworkHelper): CurrencyconversionRepo =
+        CurrencyRepoImpl(apiService,currencyDao, appPreference,networkHelper)
 
     @Provides
     @Singleton
-    fun provideBalanceCalculatorRepository(appDatabase: AppDatabase,appPreference: PreferenceManager): BalanceCalculatorRepo =
-        BalanceCalculatorRepoImpl(appDatabase,appPreference)
+    fun provideBalanceCalculatorRepository(balanceDao: AccountBalanceDao): BalanceCalculatorRepo =
+        BalanceCalculatorRepoImpl(balanceDao)
 }

@@ -11,4 +11,5 @@
     <color name="main_color">#009be0</color>
     <color name="buy_color">#00b241</color>
     <color name="sell_color">#ff3a45</color>
+    <color name="light_gray">#dedede</color>
 </resources>

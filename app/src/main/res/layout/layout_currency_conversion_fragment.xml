@@ -33,12 +33,15 @@
         app:layout_constraintTop_toBottomOf="@id/topLayout"
         android:id="@+id/progressLoader"
         android:indeterminate="true"
+        app:indicatorColor="@color/light_gray"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <TextView
         android:id="@+id/tvInternetStatus"
         android:layout_width="match_parent"
         android:layout_height="20dp"
+        android:textAlignment="center"
+        android:textColor="@color/light_gray"
         app:layout_constraintTop_toBottomOf="@+id/progressLoader"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>

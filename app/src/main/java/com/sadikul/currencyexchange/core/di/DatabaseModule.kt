@@ -17,4 +17,13 @@ object DatabaseModule {
     @Provides
     fun provideDatabase(@ApplicationContext context: Context) = AppDatabase.getInstance(context = context)
 
+
+    @Singleton
+    @Provides
+    fun provideCurrencyDao(database: AppDatabase) = database.currencyDao()
+
+    @Singleton
+    @Provides
+    fun provideBalanceDao(database: AppDatabase) = database.balanceDao()
+
 }

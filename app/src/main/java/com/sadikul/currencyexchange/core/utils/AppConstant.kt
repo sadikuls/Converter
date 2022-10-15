@@ -9,7 +9,6 @@ const val WRITE_TIMEOUT_S: Long = 60
 const val APP_PREF = "Android_Pref_Currency"
 const val BASE_URL = "https://api.apilayer.com"
 const val ENDPOINT_LATEST = "/tasks/api/currency-exchange-rates"
-//const val API_KEY = "HBhvWzrB3TBTh6k4C3nK6ybfggmoRrn4"
 val CURENCIES_FOR_DEFAULT_DATA = listOf("EUR")
 const val INITIAL_BALANCE = 1000.0
 const val NETWORK_CALL_DELAY = 5 * 1000L

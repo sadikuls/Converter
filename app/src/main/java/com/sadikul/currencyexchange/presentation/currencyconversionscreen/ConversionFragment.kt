@@ -23,6 +23,7 @@ import com.sadikul.currencyexchange.data.remote.dto.Currency
 import com.sadikul.currencyexchange.databinding.LayoutCurrencyConversionFragmentBinding
 import com.sadikul.currencyexchange.domain.adapter.BalanceListAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 
@@ -96,7 +97,14 @@ class ConversionFragment : Fragment() {
                 if (it.error.isNotBlank()) {
                     //updateUi(true, null)
                     //Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
-                    showLoader(false)
+                    if (it.items.size <= 0) {
+                        binding.tvInternetStatus.visibility = View.VISIBLE
+                        binding.tvInternetStatus.text = it.error
+                        showLoader(true)
+                    } else {
+                        //binding.tvInternetStatus.text = "Data synced"
+                        showLoader(false)
+                    }
                 }
 
                 if (it.items.size > 0) {
@@ -325,6 +333,7 @@ class ConversionFragment : Fragment() {
                 layoutButton.visibility = View.GONE
             }else{
                 progressLoader.visibility = View.GONE
+                binding.tvInternetStatus.visibility = View.GONE
                 layoutBuy.container.visibility = View.VISIBLE
                 layoutSell.container.visibility = View.VISIBLE
                 layoutButton.visibility = View.VISIBLE
