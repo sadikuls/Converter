@@ -189,11 +189,11 @@ class ConversionFragment : Fragment() {
                 inputTextAmount.setBackgroundResource(android.R.color.transparent);
 
             }
-
             btnSubmit.setOnClickListener {
                 viewModel.conversionState.value.conversionData?.let { it1 -> viewModel.submit(it1) }
             }
         }
+
     }
 
     private fun convertCurrency() {

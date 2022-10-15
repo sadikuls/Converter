@@ -125,10 +125,7 @@ class CurrencyconversionViewmodel @Inject constructor(
         data.let {
             it.commission = commissionCalculatorUseCase(
                 data.fromAmount,
-                data.fromCurrency,
-                COMMISSION_RATE,
-                MAX_FREE_CONVERSION,
-                MAX_FREE_CONVERSION_AMOUNT
+                data.fromCurrency
             )
             validatorUseCase(it).onEach { result ->
                 if (result.isValid) {

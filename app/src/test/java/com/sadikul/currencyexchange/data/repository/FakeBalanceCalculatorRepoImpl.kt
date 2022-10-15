@@ -21,6 +21,10 @@ class FakeBalanceCalculatorRepoImpl : BalanceCalculatorRepo {
         return balancelist
     }
 
+    override suspend fun insertBalance(currency: CurrencyBalanceModel) {
+        balancelist.add(currency.toEntity())
+    }
+
     override suspend fun updateBalance(item: CurrencyBalanceModel) {
         balancelist.removeIf { it.currency == item.currency }
         balancelist.add(item.toEntity())

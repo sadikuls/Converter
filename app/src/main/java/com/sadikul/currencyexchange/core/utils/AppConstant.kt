@@ -16,7 +16,9 @@ const val NETWORK_CALL_DELAY = 5 * 1000L
 
 //Applicable for every currency
 const val COMMISSION_RATE = 0.7
+const val MAX_FREE_CONVERSION_AMOUNT = 0.0
 //Applicable for every currency
-const val MAX_FREE_CONVERSION_AMOUNT = 200.0
-//Applicable for every currency
-const val MAX_FREE_CONVERSION = 10
+const val MAX_FREE_CONVERSION = 5
+const val CURRENCY_EURO = "EUR"
+//Applicable only for euro
+const val MAX_FREE_AMOUNT_FOR_EURO = 200.0
