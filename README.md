@@ -26,8 +26,8 @@ The Internal machanism of the application is given bellow.
 
 - **Kotlin** -> 100% Kotlin used for this project.
 - **MVVM Clean Architecture** -> To write testable and decoupled code Clean architecture has used in this project.
-- **Retrofit** -> For networking related task (Added but not being used)
-- **Room** -> for store persistance data
+- **Retrofit** -> For networking related task
+- **Room** -> for local data cache
 - **Coroutine** -> for background/long running task
 - **Dagger-hilt** -> Dependency injection
 - **GSON** -> json parser/mapper
